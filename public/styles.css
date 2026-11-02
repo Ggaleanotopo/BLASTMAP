@@ -55,3 +55,12 @@
   .field-toolbar button.active{background:#d4f2e4;border-color:#288a6e;}
   .sidebar.mobile-open + .map-area .field-toolbar{display:none !important;}
 }
+
+/* V0.4.2: cuatro iconos discretos y accesibles exclusivamente en Mapa. */
+@media(max-width:700px){
+ .field-toolbar{display:flex!important;position:absolute;top:62px;left:9px;right:auto;z-index:8;flex-direction:row;gap:5px;width:auto;max-width:unset;background:#ffffffd9;padding:4px;border-radius:12px;box-shadow:0 3px 12px #102b3b25}
+ .field-toolbar button{display:grid;place-items:center;width:37px;height:38px;min-width:37px;min-height:38px;padding:0;gap:0;border-radius:9px;background:#fff;border:1px solid #b7c8cd;color:#19394a;font-size:22px;font-weight:650;box-shadow:none;line-height:1}
+ .field-toolbar button span{display:none!important}
+ .sidebar.mobile-open + .map-area .field-toolbar{display:none!important}
+ .field-toolbar button.active{background:#d4f2e4;border-color:#288a6e}
+}

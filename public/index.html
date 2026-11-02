@@ -80,7 +80,7 @@
     <div class="notice notice-small">El mapa es un plano vectorial local con cuadrícula, <b>no una ortofoto</b>. El GPS real exige HTTPS o localhost y permiso del usuario.</div>
   </section>
  </div>
- <div class="side-footer"><span class="storage-indicator"><i></i> GitHub + dispositivo</span><span>WEB V0.4.1</span></div>
+ <div class="side-footer"><span class="storage-indicator"><i></i> GitHub + dispositivo</span><span>WEB V0.4.2</span></div>
 </aside>
 <main class="map-area">
  <div id="google-map" class="hidden" aria-label="Google Maps con voladuras"></div>
@@ -88,10 +88,10 @@
  <div class="map-top-left"><div class="map-label"><span class="map-live-dot"></span><span id="map-mode-label">PLANO LOCAL · SIN ORTOFOTO</span></div></div>
  <button id="mobile-gps-actions" class="mobile-gps-actions" type="button">◎ Ubicación y GPS</button>
  <div class="field-toolbar" aria-label="Herramientas del mapa">
- <button type="button" id="quick-gps">◎ <span>Activar GPS</span></button>
- <button type="button" id="quick-location">⌖ <span>Mi ubicación</span></button>
- <button type="button" id="quick-measure">⌁ <span>Medir</span></button>
- <button type="button" id="quick-fit">⛶ <span>Centrar áreas</span></button>
+ <button type="button" id="quick-gps" title="Activar o detener GPS" aria-label="Activar o detener GPS">◎ <span>Activar GPS</span></button>
+ <button type="button" id="quick-location" title="Centrar mi ubicación" aria-label="Centrar mi ubicación">⌖ <span>Mi ubicación</span></button>
+ <button type="button" id="quick-measure" title="Medir distancia" aria-label="Medir distancia">⌁ <span>Medir</span></button>
+ <button type="button" id="quick-fit" title="Centrar las voladuras visibles" aria-label="Centrar las voladuras visibles">⛶ <span>Centrar áreas</span></button>
  </div>
  <button id="fit-all-offline" class="fit-all-offline" type="button" aria-label="Centrar las voladuras visibles">⛶ Centrar voladuras</button>
  <div class="map-top-right"><span class="coord-badge" id="coord-readout">E — · N —</span></div>
