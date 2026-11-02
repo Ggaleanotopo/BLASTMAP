@@ -1,0 +1,37 @@
+BLASTMAP WEB V0.4.0 — SIN MASTER NI CATEGORÍAS OFICIALES
+
+Dos formas de incorporar áreas:
+A. Cada operador usa Importar en la página: el archivo queda en su dispositivo.
+B. El propietario de GitHub sube archivos DXF a public/voladuras y los registra
+   en public/voladuras-archivos.json. Al publicar Netlify, todos los usuarios
+   los reciben al abrir la página o al sincronizar.
+
+INSTALACIÓN DESDE CERO
+1. Descarga el ZIP completo y descomprímelo.
+2. Crea un repositorio nuevo en github.com/new.
+3. Sube TODO el contenido descomprimido, incluyendo public y netlify.toml.
+4. Conecta ese repositorio en Netlify (Import existing project).
+5. Publicar desde carpeta public; build command vacío.
+
+ARCHIVOS DXF COMPARTIDOS
+1. En GitHub entra en public/voladuras y sube 1 o varios DXF.
+2. Edita public/voladuras-archivos.json, ejemplo:
+{
+ "version":"2026-11-02-02",
+ "files":[
+   {"file":"VOLADURA_B13_N30.dxf","crs":"magna_central"},
+   {"file":"VOLADURA_B13_N40.dxf","crs":"magna_nacional"}
+ ]
+}
+3. Los nombres deben coincidir exactamente con los archivos en GitHub.
+4. Guarda con Commit changes. Netlify publicará el sitio.
+5. Abre el enlace, pulsa Actualizar o abre la app de nuevo.
+
+FILTROS
+En Voladuras selecciona ver todas, solo GitHub o solo dispositivo, y activa
+cada archivo o capa mediante las casillas.
+
+SIN INTERNET
+Conserva el último conjunto descargado en la caché del dispositivo y las
+importaciones locales. Centrar áreas no necesita internet cuando hay geometrías.
+Google Satélite sigue requiriendo internet.

@@ -1,2 +1,1 @@
-# BLASTMAP
-VISOR DE VOLADURAS · A&amp;C GMR
+BlastMap Web V0.4.0: sin MASTER ni categorías oficiales. Los usuarios importan archivos; el propietario del repositorio publica DXF en public/voladuras y registra en voladuras-archivos.json. Consulta GUIA_INSTALACION_V040.txt.

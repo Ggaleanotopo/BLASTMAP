@@ -1,0 +1,18 @@
+BLASTMAP WEB V0.3.8 — NUEVO GITHUB Y NETLIFY (SIN INSTALAR NADA)
+
+1. Descarga y descomprime BlastMap_Web_V0_3_8_Completo.zip.
+2. Abre https://github.com/new y crea un repositorio (ejemplo blastmap-web).
+3. En tu repositorio abre Add file > Upload files.
+4. Sube el CONTENIDO extraído; public/ y netlify.toml deben quedar en la raíz.
+5. Pulsa Commit changes.
+6. En Netlify: Add new project > Import existing project > GitHub.
+7. Selecciona el repositorio; rama main; Publish directory = public; Build command vacío.
+8. Publica y abre la URL de Netlify.
+9. Importa los DXF reales en la pestaña Importar, con el sistema de coordenadas correcto.
+10. En MASTER selecciona los archivos y descarga voladuras-oficiales.json.
+11. En GitHub reemplaza public/voladuras-oficiales.json y pulsa Commit changes.
+
+CENTRAR VOLADURAS
+En el mapa pulsa '⛶ Centrar voladuras'. Encuadra los polígonos actualmente visibles, sin internet ni GPS. Si el usuario está sin conexión debe tener previamente guardadas las áreas en su dispositivo. Google Satélite no funciona offline.
+
+No se incluyen los DXF reales de la mina publicados por defecto.
