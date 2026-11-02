@@ -1,0 +1,16 @@
+BLASTMAP WEB V0.3.7 - CORRECCION DE NOMBRES DXF
+
+1. Se eliminan los archivos y botones de demostracion.
+2. Los textos internos de las areas se relacionan espacialmente con las polilineas cerradas.
+3. Se conservan capas y nombres de archivo para los filtros.
+4. El MASTER puede importar los DXF reales, seleccionar todos los archivos y descargar voladuras-oficiales.json.
+5. El JSON debe reemplazarse en public/voladuras-oficiales.json por GitHub para publicarlo.
+
+ACTUALIZACION EN GITHUB:
+- Reemplazar public/dxf.js, public/index.html, public/app.js, public/sw.js.
+- Eliminar la carpeta public/examples si existe.
+- Eliminar archivos EJEMPLO_* de public si existen (opcionales).
+- No reemplazar voladuras-oficiales.json salvo cuando el MASTER decida actualizar sus areas.
+- Confirmar cambios y esperar despliegue de Netlify.
+
+NOTA: Nombres de zonas/niveles que no sean textos internos del contorno pueden requerir una regla de asociacion adicional.
