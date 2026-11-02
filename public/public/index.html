@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<meta name="theme-color" content="#111d29"/><meta name="description" content="Visor centralizado de voladuras, importación DXF KML KMZ y GPS."/>
+<link rel="icon" href="assets/favicon.png" type="image/png"/><link rel="manifest" href="manifest.webmanifest"/>
+<link rel="stylesheet" href="styles.css"/>
+<title>BlastMap Web · Visor de voladuras</title>
+</head>
+<body>
+<div class="app-shell">
+<header class="topbar">
+ <div class="brand"><img class="logo logo-img" src="assets/logo-acgmr.png" alt="A&C GMR"/><div><strong>BLAST<span>MAP</span></strong><small>VISOR DE VOLADURAS · A&C GMR</small></div></div>
+ <span class="crs-pill">COORDENADAS DE TRABAJO <b id="crs-badge">MAGNA Central</b></span>
+ <div class="top-actions"><span id="official-top" class="status-pill">Sin sincronizar</span><span id="connect-pill" class="status-pill"><i></i> Sin GPS</span><button id="install-btn" class="btn btn-outline hidden" type="button">Instalar app</button></div>
+</header>
+<div class="workspace">
+<aside class="sidebar" id="sidebar">
+ <nav class="side-nav" aria-label="Secciones">
+   <button type="button" class="tab active" data-tab="mapa"><span class="tab-symbol">◉</span> Mapa</button>
+   <button type="button" class="tab" data-tab="voladuras"><span class="tab-symbol">▱</span> Voladuras</button>
+   <button type="button" class="tab" data-tab="importar"><span class="tab-symbol">⇧</span> Importar archivos</button>
+   <button type="button" class="tab" data-tab="ajustes"><span class="tab-symbol">⚙</span> Ajustes</button>
+ </nav>
+ <div class="side-body">
+  <section class="panel active" id="panel-mapa">
+   <div class="eyebrow">CONTROL DE UBICACIÓN</div><h1>Visor de campo</h1><p class="muted">Identifica tu posición respecto a los polígonos del plano.</p>
+   <article class="live-card" id="live-card"><div class="live-heading"><span class="dot amber"></span><span id="live-label">MODO DEMOSTRACIÓN</span></div><div class="live-title" id="live-title">Sin posición GPS</div><div class="live-subtitle" id="live-detail">Activa el GPS o simula una ubicación para probar.</div><div class="live-meta" id="live-accuracy">Precisión: —</div></article>
+   <div class="section-caption">POSICIONAMIENTO</div><button class="btn btn-primary full" id="gps-btn" type="button">◎ &nbsp; Activar GPS real</button>
+   <div class="btn-group"><button class="btn btn-secondary" id="sim-inside" type="button">Simular interior</button><button class="btn btn-secondary" id="sim-border" type="button">Simular borde</button></div>
+   <button class="btn btn-text full" id="sim-outside" type="button">Simular fuera de voladuras</button>
+   <div class="section-caption">VOLADURA SELECCIONADA</div><div id="selected-card" class="selection-card"><span class="muted">Toca un polígono en el mapa para consultar sus datos.</span></div>
+   <div class="notice notice-small">Uso orientativo. El GPS del celular no sustituye protocolos de seguridad ni delimitación de áreas de voladura.</div>
+  </section>
+  <section class="panel" id="panel-voladuras">
+    <div class="eyebrow">INVENTARIO DE POLÍGONOS</div><h1>Voladuras</h1><p class="muted" id="area-count">0 áreas cargadas</p>
+    <input type="search" id="search" class="field" placeholder="Buscar código, capa o archivo…" aria-label="Buscar voladuras"/>
+    <label class="section-caption" for="view-mode">VISUALIZACIÓN</label>
+    <select id="view-mode" class="field"><option value="all">Ver todas</option><option value="official">Solo archivos de GitHub</option><option value="personal">Solo archivos del dispositivo</option></select>
+    <div class="section-caption">FILTRO POR ARCHIVO</div><div id="filter-sources" class="filter-list muted">Sin archivos cargados.</div>
+    <div class="section-caption">FILTRO POR CAPA</div><div id="filter-layers" class="filter-list muted">Sin capas cargadas.</div>
+    <div id="area-list" class="area-list"></div>
+  </section>
+  <section class="panel" id="panel-importar">
+    <div class="eyebrow">IMPORTACIÓN DE ARCHIVOS</div><h1>Importar archivos</h1><p class="muted">Puedes cargar archivos en este dispositivo, sin modificar los DXF compartidos en GitHub. Admite DXF, KML, KMZ y GeoJSON.</p>
+    <label class="section-caption" for="import-crs">SISTEMA DE COORDENADAS DEL ARCHIVO DXF</label>
+    <select class="field crs-select" id="import-crs"><option value="magna_central">MAGNA Central</option><option value="magna_nacional">MAGNA Origen Nacional</option><option value="magna_oeste">MAGNA Oeste</option><option value="magna_este">MAGNA Este</option><option value="magna_oeste_oeste">MAGNA Oeste-Oeste</option><option value="magna_este_este">MAGNA Este-Este</option><option value="wgs84">WGS84</option></select>
+    <label class="dropzone" id="dropzone" for="dxf-input"><span class="dropicon">⇧</span><strong>Selecciona o arrastra uno o varios archivos</strong><small>DXF ASCII, KML, KMZ, GeoJSON · máximo 12 MB por archivo</small></label>
+    <input type="file" id="dxf-input" accept=".dxf,.kml,.kmz,.geojson,.json" multiple hidden/>
+    <div class="notice">Para DXF, selecciona el sistema original antes de importar: X = Este, Y = Norte. KML/KMZ/GeoJSON usan WGS84 geográfico y se transforman automáticamente. Verifica puntos de control.</div>
+    <div class="section-caption">RESULTADO DEL IMPORTADOR</div><div id="import-result" class="import-result muted">Aún no has importado archivos.</div>
+    <div class="section-caption">MAPA DE FONDO · ORTOFOTO</div>
+    <p class="muted">Selecciona JPG, JGW y PRJ juntos. El PRJ permite verificar el sistema de referencia; la imagen queda en el dispositivo durante esta sesión.</p>
+    <label class="section-caption" for="raster-crs">SISTEMA DE COORDENADAS DE LA ORTOFOTO</label>
+    <select class="field" id="raster-crs"><option value="magna_central">MAGNA Central</option><option value="magna_nacional">MAGNA Origen Nacional</option><option value="magna_oeste">MAGNA Oeste</option><option value="magna_este">MAGNA Este</option><option value="magna_oeste_oeste">MAGNA Oeste-Oeste</option><option value="magna_este_este">MAGNA Este-Este</option><option value="wgs84">WGS84</option></select>
+    <input class="field" type="file" id="raster-files" accept=".jpg,.jpeg,.jgw,.jpgw,.wld,.prj,.JPG,.JGW,.PRJ" multiple aria-label="Elegir JPG, JGW y PRJ"/>
+    <button class="btn btn-secondary full" id="raster-load" type="button">Cargar ortofoto</button>
+    <label class="switch-row"><input type="checkbox" id="raster-show" checked/> Mostrar ortofoto</label>
+    <label class="section-caption" for="raster-opacity">TRANSPARENCIA</label><input id="raster-opacity" type="range" min="10" max="100" value="85" style="width:100%;margin-bottom:10px"/>
+    <button class="btn btn-text full" id="raster-remove" type="button">Quitar ortofoto del visor</button>
+    <div id="raster-status" class="notice notice-small">Sin imagen de fondo cargada.</div>
+    <div class="section-caption">FONDO DE GOOGLE MAPS (EN LÍNEA)</div>
+    <label class="section-caption" for="basemap-mode">SELECCIONAR FONDO</label>
+    <select class="field" id="basemap-mode"><option value="local">Plano local / Ortofoto</option><option value="google">Google Satélite</option></select>
+    <label class="section-caption" for="google-key">CLAVE API GOOGLE MAPS JAVASCRIPT</label>
+    <input class="field" id="google-key" type="password" autocomplete="off" placeholder="Pega tu clave de Google Cloud" aria-label="Clave de Google Maps"/>
+    <button class="btn btn-secondary full" id="google-enable" type="button">Activar Google Satélite</button>
+    <div class="notice notice-small">Google requiere Internet, Maps JavaScript API habilitada y clave restringida al dominio del sitio. La clave se usa en el navegador. Google Satélite no queda disponible offline.</div>
+    <div class="section-caption">ARCHIVOS COMPARTIDOS DESDE GITHUB</div><div id="official-source" class="file-row muted">Cargando información oficial…</div>
+    <div class="section-caption">ARCHIVOS DE ESTE DISPOSITIVO</div><div id="source-list"></div>
+
+  </section>
+  <section class="panel" id="panel-ajustes">
+    <div class="eyebrow">CONFIGURACIÓN DEL PROYECTO</div><h1>BlastMap Web</h1>
+    <label class="section-caption" for="display-crs">COORDENADAS QUE DESEO VISUALIZAR</label><select id="display-crs" class="field crs-select"><option value="magna_central">MAGNA Central</option><option value="magna_nacional">MAGNA Origen Nacional</option><option value="magna_oeste">MAGNA Oeste</option><option value="magna_este">MAGNA Este</option><option value="magna_oeste_oeste">MAGNA Oeste-Oeste</option><option value="magna_este_este">MAGNA Este-Este</option><option value="wgs84">WGS84</option></select><p class="muted">Este selector cambia las coordenadas mostradas, sin alterar las geometrías importadas. Los sistemas técnicos se gestionan internamente.</p>
+    <div class="section-caption">OPCIONES DE VISTA</div><label class="switch-row"><input type="checkbox" id="grid-toggle" checked/> Mostrar cuadrícula proyectada en metros</label><label class="switch-row"><input type="checkbox" id="labels-toggle" checked/> Mostrar códigos de voladuras</label>
+    <div class="section-caption">SINCRONIZACIÓN</div><div id="sync-status" class="notice notice-small">Consultando archivos de GitHub…</div><button type="button" id="sync-now" class="btn btn-secondary full">↻ &nbsp; Buscar nueva publicación</button><div class="section-caption">ALMACENAMIENTO LOCAL</div><p class="muted">Tus importaciones se guardan en el dispositivo. Quien administra GitHub puede compartir DXF colocándolos en public/voladuras y registrándolos en voladuras-archivos.json.</p>
+    <button class="btn btn-secondary full" type="button" id="export-btn">↓ &nbsp; Exportar respaldo JSON</button><label class="btn btn-secondary full import-json" for="restore-input">↑ &nbsp; Restaurar respaldo JSON</label><input hidden type="file" id="restore-input" accept=".json,application/json"/>
+    <button class="btn btn-danger full" type="button" id="clear-btn">Eliminar mis archivos personales</button>
+    <div class="notice notice-small">El mapa es un plano vectorial local con cuadrícula, <b>no una ortofoto</b>. El GPS real exige HTTPS o localhost y permiso del usuario.</div>
+  </section>
+ </div>
+ <div class="side-footer"><span class="storage-indicator"><i></i> GitHub + dispositivo</span><span>WEB V0.4.1</span></div>
+</aside>
+<main class="map-area">
+ <div id="google-map" class="hidden" aria-label="Google Maps con voladuras"></div>
+ <canvas id="map-canvas" aria-label="Plano de voladuras zonas de voladura" tabindex="0"></canvas>
+ <div class="map-top-left"><div class="map-label"><span class="map-live-dot"></span><span id="map-mode-label">PLANO LOCAL · SIN ORTOFOTO</span></div></div>
+ <button id="mobile-gps-actions" class="mobile-gps-actions" type="button">◎ Ubicación y GPS</button>
+ <div class="field-toolbar" aria-label="Herramientas del mapa">
+ <button type="button" id="quick-gps">◎ <span>Activar GPS</span></button>
+ <button type="button" id="quick-location">⌖ <span>Mi ubicación</span></button>
+ <button type="button" id="quick-measure">⌁ <span>Medir</span></button>
+ <button type="button" id="quick-fit">⛶ <span>Centrar áreas</span></button>
+ </div>
+ <button id="fit-all-offline" class="fit-all-offline" type="button" aria-label="Centrar las voladuras visibles">⛶ Centrar voladuras</button>
+ <div class="map-top-right"><span class="coord-badge" id="coord-readout">E — · N —</span></div>
+ <div class="map-right-tools"><button id="zoom-in" title="Acercar" aria-label="Acercar" type="button">+</button><button id="zoom-out" title="Alejar" aria-label="Alejar" type="button">−</button><div class="tool-divider"></div><button id="fit-btn" title="Mostrar todas las áreas" aria-label="Centrar áreas" type="button">⛶</button><button id="gps-center" title="Centrar GPS" aria-label="Centrar GPS" type="button">⊙</button></div>
+ <div class="map-bottom-left"><div class="scale-bar"><span id="scale-text">100 m</span><div id="scale-line"></div></div><span class="north-arrow">▲ <small>N</small></span></div>
+ <div class="map-bottom-right"><button class="measure-btn" id="measure-btn" type="button">⌁ <span>Medir distancia</span></button><div class="map-count" id="map-count">0 voladuras</div></div>
+ <div id="measure-banner" class="measure-banner hidden"><span id="measure-text">Selecciona dos puntos sobre el mapa</span><button id="measure-clear" type="button">Limpiar</button></div>
+ <div id="toast" role="status" class="toast hidden"></div>
+</main>
+</div>
+<nav class="mobile-nav" aria-label="Navegación móvil"><button class="active" data-tab="mapa" type="button"><span>◉</span>Mapa</button><button data-tab="voladuras" type="button"><span>▱</span>Voladuras</button><button data-tab="importar" type="button"><span>⇧</span>Importar</button><button data-tab="ajustes" type="button"><span>⚙</span>Ajustes</button></nav>
+</div>
+<script src="geo.js"></script><script src="dxf.js"></script><script src="vector.js"></script><script src="app.js"></script>
+</body></html>

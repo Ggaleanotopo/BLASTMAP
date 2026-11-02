@@ -1,0 +1,27 @@
+BLASTMAP WEB V0.3.6 - CAMBIOS PRINCIPALES
+
+1. Logo
+- Se reemplazo el logo superior por A&C GMR.
+
+2. Ejemplos DXF
+- Se incluyeron 4 archivos de ejemplo en public/examples/.
+- En la pestaña Importar aparecen botones para cargarlos directamente.
+
+3. Importacion multiple
+- Ahora puedes seleccionar o arrastrar varios archivos a la vez.
+- El MASTER puede importar varios archivos y luego escoger cuales publica.
+
+4. Filtro por archivo y por capa
+- En la pestaña Voladuras hay un selector para ver: todas, solo oficiales o solo personales.
+- Hay casillas para activar o desactivar archivos completos.
+- Hay casillas para activar o desactivar capas especificas.
+
+ACTUALIZACION RAPIDA EN GITHUB
+1. Descarga y descomprime el ZIP de actualizacion.
+2. Sube a la carpeta public estos archivos: index.html, app.js, styles.css, manifest.webmanifest y la carpeta assets/ si no existe.
+3. Sube tambien la carpeta public/examples/ con los 4 DXF de ejemplo.
+4. Haz Commit changes.
+5. Espera a que Netlify publique.
+
+IMPORTANTE
+- No reemplaces public/voladuras-oficiales.json si quieres conservar las areas oficiales vigentes.
